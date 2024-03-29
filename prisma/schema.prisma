@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
-  email         String   @unique
+  id            String      @id @default(cuid())
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+  email         String      @unique
   name          String?
   password      String
-  workInterval  Int?     @default(50)
-  breakInterval Int?     @default(10)
-  intervalCount Int?     @default(7)
+  workInterval  Int?        @default(50)
+  breakInterval Int?        @default(10)
+  intervalCount Int?        @default(7)
   tasks         Task[]
+  timeBlocks    TimeBlock[]
 
   @@map("user")
 }
@@ -34,6 +35,21 @@ model Task {
   userId String
 
   @@map("task")
+}
+
+model TimeBlock {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  name      String
+  color     String?
+  duration  Int
+  order     Int      @default(1)
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@map("time_block")
 }
 
 enum Priority {
