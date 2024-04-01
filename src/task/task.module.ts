@@ -8,4 +8,4 @@ import { TaskService } from './task.service';
   providers: [PrismaService, TaskService],
   exports: [TaskService]
 })
-export class UserModule {}
+export class TaskModule {}

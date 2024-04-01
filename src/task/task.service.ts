@@ -1,34 +1,47 @@
 import { Injectable } from '@nestjs/common';
-import { hash } from 'argon2';
-import { AuthDto } from 'src/auth/dto/auth.dto';
 import { PrismaService } from 'src/prisma.service';
-import { startOfDay, subDays } from 'date-fns';
 import { TaskDto } from './task.dto';
 
 @Injectable()
 export class TaskService {
 	constructor(private prisma: PrismaService) {}
 
-	async getById(id:string) {
-		return this.prisma.user.findUnique({
+	async getAll(userId: string) {
+		return this.prisma.task.findMany({
 			where: {
-				id
-			},
-			include: {
-				tasks: true
+				userId
 			}
 		})
 	}
 
+	async create(dto: TaskDto, userId: string) {
+		return this.prisma.task.create({
+			data: {
+				...dto,
+				user: {
+					connect: {
+						id: userId
+					}
+				}
+			}
+		})
+	}
 
-	async create(dto: TaskDto	) {
-		return this.prisma.user.create({
+	async update(dto: Partial<TaskDto>, taskId: string, userId: string) {
+		return this.prisma.task.update({
+			where: {
+				userId,
+				id: taskId
+			},
 			data: dto
 		})
 	}
 
-	async update(id: string, dto: UserDto) {
-		
+	async delete (taskId: string) {
+		return this.prisma.task.delete({
+			where: {
+				id: taskId
+			}
+		})
 	}
-
 }
