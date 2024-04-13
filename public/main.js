@@ -8,7 +8,7 @@ async function bootstrap() {
     app.setGlobalPrefix('api');
     app.use(cookieParser());
     app.enableCors({
-        origin: ['localhost'],
+        origin: ['https://red-planner-frontend.vercel.app'],
         credentials: true,
         exposedHeaders: 'set-cookie'
     });
